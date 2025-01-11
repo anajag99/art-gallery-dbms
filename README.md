@@ -83,4 +83,4 @@ The database is implemented using SQL Data Definition Language (DDL) statements.
 
   INSERT INTO Commissions (Payment_ID, Commission_Amount, Commission_Date)
   VALUES (NEW.Payment_ID, commission_amount, NEW.Payment_Date);
-END;
+  END;
