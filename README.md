@@ -60,26 +60,26 @@ The database is implemented using SQL Data Definition Language (DDL) statements.
 - **Trigger**: Automatically calculate and insert commission upon payment.
   ```sql
   CREATE TRIGGER AfterPaymentInsert
-AFTER INSERT ON Payment
-FOR EACH ROW
-BEGIN
-  DECLARE commission_rate DECIMAL(5,2);
-  DECLARE commission_amount DECIMAL(10,2);
-  DECLARE artwork_type VARCHAR(50);
-  DECLARE artwork_amount DECIMAL(10,2);
+  AFTER INSERT ON Payment
+  FOR EACH ROW
+  BEGIN
+    DECLARE commission_rate DECIMAL(5,2);
+    DECLARE commission_amount DECIMAL(10,2);
+    DECLARE artwork_type VARCHAR(50);
+    DECLARE artwork_amount DECIMAL(10,2);
 
-  SELECT Artwork.Type INTO artwork_type FROM Artwork WHERE Artwork.Artwork_ID = NEW.Artwork_ID;
-  SELECT Artwork.Amount INTO artwork_amount FROM Artwork WHERE Artwork.Artwork_ID = NEW.Artwork_ID;
+    SELECT Artwork.Type INTO artwork_type FROM Artwork WHERE Artwork.Artwork_ID = NEW.Artwork_ID;
+    SELECT Artwork.Amount INTO artwork_amount FROM Artwork WHERE Artwork.Artwork_ID = NEW.Artwork_ID;
 
-  IF artwork_type = 'Painting' THEN
-    SET commission_rate = 0.20;
-  ELSEIF artwork_type = 'Sculpture' THEN
-    SET commission_rate = 0.12;
-  ELSE
-    SET commission_rate = 0.15;
-  END IF;
+    IF artwork_type = 'Painting' THEN
+      SET commission_rate = 0.20;
+    ELSEIF artwork_type = 'Sculpture' THEN
+      SET commission_rate = 0.12;
+    ELSE
+      SET commission_rate = 0.15;
+    END IF;
 
-  SET commission_amount = artwork_amount * commission_rate;
+    SET commission_amount = artwork_amount * commission_rate;
 
   INSERT INTO Commissions (Payment_ID, Commission_Amount, Commission_Date)
   VALUES (NEW.Payment_ID, commission_amount, NEW.Payment_Date);
